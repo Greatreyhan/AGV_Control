@@ -73,7 +73,33 @@ static void MX_TIM11_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint32_t counter_A = 0, counter_B = 0, counter_C = 0, counter_D = 0;
+int16_t count_A = 0, count_B = 0, count_C = 0, count_D = 0;
+int16_t position_A = 0, position_B = 0, position_C = 0, position_D = 0;
+int speed_A = 0, speed_B = 0, speed_C = 0, speed_D = 0;
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	if(htim->Instance  == TIM1){
+		counter_A = __HAL_TIM_GET_COUNTER(htim);
+		count_A = (int16_t)counter_A;
+		position_A = count_A/4;
+	}
+	if(htim->Instance  == TIM2){
+		counter_B = __HAL_TIM_GET_COUNTER(htim);
+		count_B = (int16_t)counter_B;
+		position_B = count_B/4;
+	}
+	if(htim->Instance  == TIM4){
+		counter_C = __HAL_TIM_GET_COUNTER(htim);
+		count_C = (int16_t)counter_C;
+		position_C = count_C/4;
+	}
+	if(htim->Instance  == TIM5){
+		counter_D = __HAL_TIM_GET_COUNTER(htim);
+		count_D = (int16_t)counter_D;
+		position_D = count_D/4;
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -117,10 +143,10 @@ int main(void)
 	
 	//+++++++++++++++++++++++++++++++++ Control PG45 +++++++++++++++++++++++++++++//
 	// FORWARD PIN
-	TIM3->CCR1 = 100;
-	TIM3->CCR2 = 100;
-	TIM3->CCR3 = 100;
-	TIM4->CCR4 = 100;
+	TIM3->CCR1 = 1000;
+	TIM3->CCR2 = 1000;
+	TIM3->CCR3 = 1000;
+	TIM3->CCR4 = 1000;
 	
 	// BACKWARD PIN
 	TIM9->CCR1 = 0;
@@ -141,19 +167,22 @@ int main(void)
 	
 	// Configuration Enabler
 	HAL_GPIO_WritePin(ENR_A_GPIO_Port, ENR_A_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_A_GPIO_Port, ENL_A_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(ENL_A_GPIO_Port, ENL_A_Pin, GPIO_PIN_SET);
 	
 	HAL_GPIO_WritePin(ENR_B_GPIO_Port, ENR_B_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_B_GPIO_Port, ENL_B_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(ENL_B_GPIO_Port, ENL_B_Pin, GPIO_PIN_SET);
 	
 	HAL_GPIO_WritePin(ENR_C_GPIO_Port, ENR_C_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_C_GPIO_Port, ENL_C_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(ENL_C_GPIO_Port, ENL_C_Pin, GPIO_PIN_SET);
 	
 	HAL_GPIO_WritePin(ENR_D_GPIO_Port, ENR_D_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_D_GPIO_Port, ENL_D_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(ENL_D_GPIO_Port, ENL_D_Pin, GPIO_PIN_SET);
 	
 	//+++++++++++++++++++++++++++++++++ ENCODER PG45 ++++++++++++++++++++++++++++++//
-	
+	HAL_TIM_Encoder_Start_IT(&htim1, TIM_CHANNEL_ALL);
+	HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
+	HAL_TIM_Encoder_Start_IT(&htim4, TIM_CHANNEL_ALL);
+	HAL_TIM_Encoder_Start_IT(&htim5, TIM_CHANNEL_ALL);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -161,10 +190,6 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-		HAL_Delay(1000);
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-		HAL_Delay(1000);
 
     /* USER CODE BEGIN 3 */
   }
@@ -242,12 +267,12 @@ static void MX_TIM1_Init(void)
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
@@ -291,12 +316,12 @@ static void MX_TIM2_Init(void)
   htim2.Init.Period = 4294967295;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
@@ -401,12 +426,12 @@ static void MX_TIM4_Init(void)
   htim4.Init.Period = 65535;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
@@ -450,12 +475,12 @@ static void MX_TIM5_Init(void)
   htim5.Init.Period = 4294967295;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
