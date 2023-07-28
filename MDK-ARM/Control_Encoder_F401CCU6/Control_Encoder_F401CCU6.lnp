@@ -1,0 +1,26 @@
+--cpu=Cortex-M4.fp.sp
+"control_encoder_f401ccu6\startup_stm32f401xc.o"
+"control_encoder_f401ccu6\main.o"
+"control_encoder_f401ccu6\stm32f4xx_it.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_msp.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_tim.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_tim_ex.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_rcc.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_rcc_ex.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_flash.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_flash_ex.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_flash_ramfunc.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_gpio.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_dma_ex.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_dma.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_pwr.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_pwr_ex.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_cortex.o"
+"control_encoder_f401ccu6\stm32f4xx_hal.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_exti.o"
+"control_encoder_f401ccu6\stm32f4xx_hal_uart.o"
+"control_encoder_f401ccu6\system_stm32f4xx.o"
+--strict --scatter "Control_Encoder_F401CCU6\Control_Encoder_F401CCU6.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Control_Encoder_F401CCU6.map" -o Control_Encoder_F401CCU6\Control_Encoder_F401CCU6.axf
