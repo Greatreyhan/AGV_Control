@@ -1,0 +1,26 @@
+--cpu=Cortex-M4.fp.sp
+"agv_control_omni\startup_stm32f411xe.o"
+"agv_control_omni\main.o"
+"agv_control_omni\stm32f4xx_it.o"
+"agv_control_omni\stm32f4xx_hal_msp.o"
+"agv_control_omni\stm32f4xx_hal_tim.o"
+"agv_control_omni\stm32f4xx_hal_tim_ex.o"
+"agv_control_omni\stm32f4xx_hal_rcc.o"
+"agv_control_omni\stm32f4xx_hal_rcc_ex.o"
+"agv_control_omni\stm32f4xx_hal_flash.o"
+"agv_control_omni\stm32f4xx_hal_flash_ex.o"
+"agv_control_omni\stm32f4xx_hal_flash_ramfunc.o"
+"agv_control_omni\stm32f4xx_hal_gpio.o"
+"agv_control_omni\stm32f4xx_hal_dma_ex.o"
+"agv_control_omni\stm32f4xx_hal_dma.o"
+"agv_control_omni\stm32f4xx_hal_pwr.o"
+"agv_control_omni\stm32f4xx_hal_pwr_ex.o"
+"agv_control_omni\stm32f4xx_hal_cortex.o"
+"agv_control_omni\stm32f4xx_hal.o"
+"agv_control_omni\stm32f4xx_hal_exti.o"
+"agv_control_omni\stm32f4xx_hal_uart.o"
+"agv_control_omni\system_stm32f4xx.o"
+--strict --scatter "AGV_Control_Omni\AGV_Control_Omni.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "AGV_Control_Omni.map" -o AGV_Control_Omni\AGV_Control_Omni.axf
