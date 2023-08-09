@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -52,7 +51,11 @@ TIM_HandleTypeDef htim11;
 UART_HandleTypeDef huart6;
 
 /* USER CODE BEGIN PV */
+//---------------- MOTOR DECLARATION ---------------------//
+extern motor_t motor_A, motor_B, motor_C, motor_D;
 
+//---------------- ENCODER DECLARATION ---------------------//
+extern encoder_t encoder_A, encoder_B, encoder_C, encoder_D;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,43 +76,29 @@ static void MX_USART6_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint32_t counter_A = 0, counter_B = 0, counter_C = 0, counter_D = 0;
-int16_t count_A = 0, count_B = 0, count_C = 0, count_D = 0;
-int16_t position_A = 0, position_B = 0, position_C = 0, position_D = 0;
-int speed_A = 0, speed_B = 0, speed_C = 0, speed_D = 0;
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-	if(htim->Instance  == TIM1){
-		counter_A = __HAL_TIM_GET_COUNTER(htim);
-		count_A = (int16_t)counter_A;
-		position_A = count_A/4;
+	if(htim->Instance  == encoder_A.tim_number){
+		encoder_A.counter  	= __HAL_TIM_GET_COUNTER(htim);
+		encoder_A.counts 		= (int16_t)encoder_A.counter;
+		encoder_A.position	= encoder_A.counts/4;
 	}
-	if(htim->Instance  == TIM2){
-		counter_B = __HAL_TIM_GET_COUNTER(htim);
-		count_B = (int16_t)counter_B;
-		position_B = count_B/4;
+	if(htim->Instance  == encoder_B.tim_number){
+		encoder_B.counter  	= __HAL_TIM_GET_COUNTER(htim);
+		encoder_B.counts 		= (int16_t)encoder_B.counter;
+		encoder_B.position	= encoder_B.counts/4;
 	}
-	if(htim->Instance  == TIM4){
-		counter_C = __HAL_TIM_GET_COUNTER(htim);
-		count_C = (int16_t)counter_C;
-		position_C = count_C/4;
+	if(htim->Instance  == encoder_C.tim_number){
+		encoder_C.counter  	= __HAL_TIM_GET_COUNTER(htim);
+		encoder_C.counts 		= (int16_t)encoder_C.counter;
+		encoder_C.position	= encoder_C.counts/4;
 	}
-	if(htim->Instance  == TIM5){
-		counter_D = __HAL_TIM_GET_COUNTER(htim);
-		count_D = (int16_t)counter_D;
-		position_D = count_D/4;
+	if(htim->Instance  == encoder_D.tim_number){
+		encoder_D.counter  	= __HAL_TIM_GET_COUNTER(htim);
+		encoder_D.counts 		= (int16_t)encoder_D.counter;
+		encoder_D.position	= encoder_D.counts/4;
 	}
 }
-
-//=================== FUNCTION PROTOTYPE ======================//
-
-/* 
-	||****** Run Omnidirection Wheel *****||
-	- int16_t speed 		: 0-1000
-	- uint8_t direction : 1 -> clockwise
-												2 -> counterclockwise
-*/
-void agv_run_motor(int16_t speed, uint8_t direction);
 
 /* USER CODE END 0 */
 
@@ -152,49 +141,66 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 	
-	//+++++++++++++++++++++++++++++++++ Control PG45 +++++++++++++++++++++++++++++//
-	// FORWARD PIN
-	TIM3->CCR1 = 1000;
-	TIM3->CCR2 = 1000;
-	TIM3->CCR3 = 1000;
-	TIM3->CCR4 = 1000;
+	//+++++++++++++++++++++++++++++++++ MOTOR INITIALIZATION +++++++++++++++++++++++++++++//
+	// Configuration 'Motor A'
+	motor_A.tim_R = &htim3;
+	motor_A.tim_L = &htim9;
+	motor_A.tim_number_R = TIM3;
+	motor_A.tim_number_L = TIM9;
+	motor_A.channel_R = 1;
+	motor_A.channel_L = 1;
+	motor_A.EN_PORT_R = ENR_A_GPIO_Port;
+	motor_A.EN_PORT_L = ENL_A_GPIO_Port;
+	motor_A.EN_PIN_R = ENR_A_Pin;
+	motor_A.EN_PIN_L = ENL_A_Pin;
 	
-	// BACKWARD PIN
-	TIM9->CCR1 = 0;
-	TIM9->CCR2 = 0;
-	TIM10->CCR1 = 0;
-	TIM11->CCR1 = 0;
+	// Configuration 'Motor B'
+	motor_B.tim_R = &htim3;
+	motor_B.tim_L = &htim9;
+	motor_B.tim_number_R = TIM3;
+	motor_B.tim_number_L = TIM9;
+	motor_B.channel_R = 2;
+	motor_B.channel_L = 2;
+	motor_B.EN_PORT_R = ENR_B_GPIO_Port;
+	motor_B.EN_PORT_L = ENL_B_GPIO_Port;
+	motor_B.EN_PIN_R = ENR_B_Pin;
+	motor_B.EN_PIN_L = ENL_B_Pin;
 	
-	// Starting Control
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
+	// Configuration 'Motor C'
+	motor_C.tim_R = &htim3;
+	motor_C.tim_L = &htim10;
+	motor_C.tim_number_R = TIM3;
+	motor_C.tim_number_L = TIM10;
+	motor_C.channel_R = 3;
+	motor_C.channel_L = 1;
+	motor_C.EN_PORT_R = ENR_C_GPIO_Port;
+	motor_C.EN_PORT_L = ENL_C_GPIO_Port;
+	motor_C.EN_PIN_R = ENR_C_Pin;
+	motor_C.EN_PIN_L = ENL_C_Pin;
 	
-	HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim11, TIM_CHANNEL_1);
+	// Configuration 'Motor D'
+	motor_D.tim_R = &htim3;
+	motor_D.tim_L = &htim11;
+	motor_D.tim_number_R = TIM3;
+	motor_D.tim_number_L = TIM11;
+	motor_D.channel_R = 4;
+	motor_D.channel_L = 1;
+	motor_D.EN_PORT_R = ENR_D_GPIO_Port;
+	motor_D.EN_PORT_L = ENL_D_GPIO_Port;
+	motor_D.EN_PIN_R = ENR_D_Pin;
+	motor_D.EN_PIN_L = ENL_D_Pin;
 	
-	// Configuration Enabler
-	HAL_GPIO_WritePin(ENR_A_GPIO_Port, ENR_A_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_A_GPIO_Port, ENL_A_Pin, GPIO_PIN_SET);
-	
-	HAL_GPIO_WritePin(ENR_B_GPIO_Port, ENR_B_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_B_GPIO_Port, ENL_B_Pin, GPIO_PIN_SET);
-	
-	HAL_GPIO_WritePin(ENR_C_GPIO_Port, ENR_C_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_C_GPIO_Port, ENL_C_Pin, GPIO_PIN_SET);
-	
-	HAL_GPIO_WritePin(ENR_D_GPIO_Port, ENR_D_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(ENL_D_GPIO_Port, ENL_D_Pin, GPIO_PIN_SET);
-	
-	//+++++++++++++++++++++++++++++++++ ENCODER PG45 ++++++++++++++++++++++++++++++//
-	HAL_TIM_Encoder_Start_IT(&htim1, TIM_CHANNEL_ALL);
-	HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
-	HAL_TIM_Encoder_Start_IT(&htim4, TIM_CHANNEL_ALL);
-	HAL_TIM_Encoder_Start_IT(&htim5, TIM_CHANNEL_ALL);
+	//+++++++++++++++++++++++++++++++++ ENCODER INITIALIZATION ++++++++++++++++++++++++++++++//
+	agv_encoder_start(encoder_A, &htim1, TIM1);
+	agv_encoder_start(encoder_B, &htim2, TIM2);
+	agv_encoder_start(encoder_C, &htim4, TIM4);
+	agv_encoder_start(encoder_D, &htim5, TIM5);
   
+	
+	agv_run_motor(motor_A, 1000);
+	agv_run_motor(motor_B, 1000);
+	agv_run_motor(motor_C, 1000);
+	agv_run_motor(motor_D, 1000);
   /* USER CODE END 2 */
 
   /* Infinite loop */

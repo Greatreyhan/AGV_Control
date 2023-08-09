@@ -31,7 +31,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -41,7 +40,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+//---------------- MOTOR DECLARATION ---------------------//
+motor_t motor_A, motor_B, motor_C, motor_D;
 
+//---------------- ENCODER DECLARATION ---------------------//
+encoder_t encoder_A, encoder_B, encoder_C, encoder_D;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -51,9 +54,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern int16_t position_A, position_B, position_C, position_D;
-int16_t oldpos_A = 0, oldpos_B = 0, oldpos_C = 0, oldpos_D = 0;
-extern int speed_A, speed_B, speed_C, speed_D;
 int indexPos = 0;
 /* USER CODE END 0 */
 
@@ -188,18 +188,17 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	indexPos++;
 	if(indexPos == 500){
+		encoder_A.speed = ((encoder_A.position-encoder_A.old_position)*2);
+		encoder_A.old_position = encoder_A.position;
 		
-		speed_A = ((position_A-oldpos_A)*2);
-		oldpos_A = position_A;
+		encoder_B.speed = ((encoder_B.position-encoder_B.old_position)*2);
+		encoder_B.old_position = encoder_B.position;
 		
-		speed_B = ((position_B-oldpos_B)*2);
-		oldpos_B = position_B;
+		encoder_C.speed = ((encoder_C.position-encoder_C.old_position)*2);
+		encoder_C.old_position = encoder_C.position;
 		
-		speed_C = ((position_C-oldpos_C)*2);
-		oldpos_C = position_C;
-		
-		speed_D = ((position_D-oldpos_D)*2);
-		oldpos_D = position_D;
+		encoder_D.speed = ((encoder_D.position-encoder_D.old_position)*2);
+		encoder_D.old_position = encoder_D.position;
 		
 		indexPos = 0;
 	}
