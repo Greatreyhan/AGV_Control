@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -76,24 +77,25 @@ static void MX_USART6_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint32_t vt = 0;
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-	if(htim->Instance  == encoder_A.tim_number){
+	if(htim->Instance  == TIM1){
 		encoder_A.counter  	= __HAL_TIM_GET_COUNTER(htim);
 		encoder_A.counts 		= (int16_t)encoder_A.counter;
 		encoder_A.position	= encoder_A.counts/4;
 	}
-	if(htim->Instance  == encoder_B.tim_number){
+	if(htim->Instance  == TIM2){
 		encoder_B.counter  	= __HAL_TIM_GET_COUNTER(htim);
 		encoder_B.counts 		= (int16_t)encoder_B.counter;
 		encoder_B.position	= encoder_B.counts/4;
 	}
-	if(htim->Instance  == encoder_C.tim_number){
+	if(htim->Instance  == TIM4){
 		encoder_C.counter  	= __HAL_TIM_GET_COUNTER(htim);
 		encoder_C.counts 		= (int16_t)encoder_C.counter;
 		encoder_C.position	= encoder_C.counts/4;
 	}
-	if(htim->Instance  == encoder_D.tim_number){
+	if(htim->Instance  == TIM5){
 		encoder_D.counter  	= __HAL_TIM_GET_COUNTER(htim);
 		encoder_D.counts 		= (int16_t)encoder_D.counter;
 		encoder_D.position	= encoder_D.counts/4;
@@ -144,11 +146,11 @@ int main(void)
 	//+++++++++++++++++++++++++++++++++ MOTOR INITIALIZATION +++++++++++++++++++++++++++++//
 	// Configuration 'Motor A'
 	motor_A.tim_R = &htim3;
-	motor_A.tim_L = &htim9;
+	motor_A.tim_L = &htim3;
 	motor_A.tim_number_R = TIM3;
-	motor_A.tim_number_L = TIM9;
-	motor_A.channel_R = 1;
-	motor_A.channel_L = 1;
+	motor_A.tim_number_L = TIM3;
+	motor_A.channel_R = 3;
+	motor_A.channel_L = 4;
 	motor_A.EN_PORT_R = ENR_A_GPIO_Port;
 	motor_A.EN_PORT_L = ENL_A_GPIO_Port;
 	motor_A.EN_PIN_R = ENR_A_Pin;
@@ -156,10 +158,10 @@ int main(void)
 	
 	// Configuration 'Motor B'
 	motor_B.tim_R = &htim3;
-	motor_B.tim_L = &htim9;
+	motor_B.tim_L = &htim3;
 	motor_B.tim_number_R = TIM3;
-	motor_B.tim_number_L = TIM9;
-	motor_B.channel_R = 2;
+	motor_B.tim_number_L = TIM3;
+	motor_B.channel_R = 1;
 	motor_B.channel_L = 2;
 	motor_B.EN_PORT_R = ENR_B_GPIO_Port;
 	motor_B.EN_PORT_L = ENL_B_GPIO_Port;
@@ -167,23 +169,23 @@ int main(void)
 	motor_B.EN_PIN_L = ENL_B_Pin;
 	
 	// Configuration 'Motor C'
-	motor_C.tim_R = &htim3;
-	motor_C.tim_L = &htim10;
-	motor_C.tim_number_R = TIM3;
-	motor_C.tim_number_L = TIM10;
-	motor_C.channel_R = 3;
-	motor_C.channel_L = 1;
+	motor_C.tim_R = &htim9;
+	motor_C.tim_L = &htim9;
+	motor_C.tim_number_R = TIM9;
+	motor_C.tim_number_L = TIM9;
+	motor_C.channel_R = 1;
+	motor_C.channel_L = 2;
 	motor_C.EN_PORT_R = ENR_C_GPIO_Port;
 	motor_C.EN_PORT_L = ENL_C_GPIO_Port;
 	motor_C.EN_PIN_R = ENR_C_Pin;
 	motor_C.EN_PIN_L = ENL_C_Pin;
 	
 	// Configuration 'Motor D'
-	motor_D.tim_R = &htim3;
+	motor_D.tim_R = &htim10;
 	motor_D.tim_L = &htim11;
-	motor_D.tim_number_R = TIM3;
+	motor_D.tim_number_R = TIM10;
 	motor_D.tim_number_L = TIM11;
-	motor_D.channel_R = 4;
+	motor_D.channel_R = 1;
 	motor_D.channel_L = 1;
 	motor_D.EN_PORT_R = ENR_D_GPIO_Port;
 	motor_D.EN_PORT_L = ENL_D_GPIO_Port;
@@ -196,7 +198,6 @@ int main(void)
 	agv_encoder_start(encoder_C, &htim4, TIM4);
 	agv_encoder_start(encoder_D, &htim5, TIM5);
   
-	
 	agv_run_motor(motor_A, 1000);
 	agv_run_motor(motor_B, 1000);
 	agv_run_motor(motor_C, 1000);
@@ -285,12 +286,12 @@ static void MX_TIM1_Init(void)
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
@@ -334,12 +335,12 @@ static void MX_TIM2_Init(void)
   htim2.Init.Period = 4294967295;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
@@ -379,9 +380,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 100-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period = 1000-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -454,12 +455,12 @@ static void MX_TIM4_Init(void)
   htim4.Init.Period = 65535;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
-  sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+  sConfig.IC1Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC1Filter = 0;
-  sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+  sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
   sConfig.IC2Filter = 0;
@@ -503,7 +504,7 @@ static void MX_TIM5_Init(void)
   htim5.Init.Period = 4294967295;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
@@ -547,9 +548,9 @@ static void MX_TIM9_Init(void)
 
   /* USER CODE END TIM9_Init 1 */
   htim9.Instance = TIM9;
-  htim9.Init.Prescaler = 0;
+  htim9.Init.Prescaler = 100-1;
   htim9.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim9.Init.Period = 65535;
+  htim9.Init.Period = 1000-1;
   htim9.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim9.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim9) != HAL_OK)
@@ -602,9 +603,9 @@ static void MX_TIM10_Init(void)
 
   /* USER CODE END TIM10_Init 1 */
   htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 0;
+  htim10.Init.Prescaler = 100-1;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 65535;
+  htim10.Init.Period = 1000-1;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
@@ -648,9 +649,9 @@ static void MX_TIM11_Init(void)
 
   /* USER CODE END TIM11_Init 1 */
   htim11.Instance = TIM11;
-  htim11.Init.Prescaler = 0;
+  htim11.Init.Prescaler = 100-1;
   htim11.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim11.Init.Period = 65535;
+  htim11.Init.Period = 1000-1;
   htim11.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim11.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim11) != HAL_OK)

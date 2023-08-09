@@ -46,7 +46,6 @@ typedef struct{
 void agv_run_motor(motor_t motor, int16_t speed);
 void agv_move_rotate(motor_t motor, int16_t speed);
 
-
 /* 
 	||****** Encoder Init *****||
 	-	encoder_t encoder		

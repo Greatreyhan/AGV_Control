@@ -8,9 +8,9 @@
 #include "Motor_Library.h"
 
 void agv_run_motor(motor_t motor, int16_t speed){
+	HAL_GPIO_WritePin(motor.EN_PORT_R, motor.EN_PIN_R, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(motor.EN_PORT_L, motor.EN_PIN_L, GPIO_PIN_SET);
 	if(speed > 0){
-		HAL_GPIO_WritePin(motor.EN_PORT_R, motor.EN_PIN_R, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(motor.EN_PORT_L, motor.EN_PIN_L, GPIO_PIN_RESET);
 		if(motor.channel_R == 1){
 			motor.tim_number_R->CCR1 = speed;
 			HAL_TIM_PWM_Start(motor.tim_R, TIM_CHANNEL_1);
@@ -27,10 +27,40 @@ void agv_run_motor(motor_t motor, int16_t speed){
 			motor.tim_number_R->CCR4 = speed;
 			HAL_TIM_PWM_Start(motor.tim_R, TIM_CHANNEL_4);
 		}
+		if(motor.channel_L == 1){
+			motor.tim_number_L->CCR1 = 0;
+			HAL_TIM_PWM_Start(motor.tim_L, TIM_CHANNEL_1);
+		}
+		else if(motor.channel_L == 2){
+			motor.tim_number_L->CCR2 = 0;
+			HAL_TIM_PWM_Start(motor.tim_L, TIM_CHANNEL_2);
+		}
+		else if(motor.channel_L == 3){
+			motor.tim_number_L->CCR3 = 0;
+			HAL_TIM_PWM_Start(motor.tim_L, TIM_CHANNEL_3);
+		}
+		else if(motor.channel_L == 4){
+			motor.tim_number_L->CCR4 = 0;
+			HAL_TIM_PWM_Start(motor.tim_L, TIM_CHANNEL_4);
+		}
 	}
 	else if(speed < 0){
-		HAL_GPIO_WritePin(motor.EN_PORT_R, motor.EN_PIN_R, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(motor.EN_PORT_L, motor.EN_PIN_L, GPIO_PIN_SET);
+		if(motor.channel_R == 1){
+			motor.tim_number_R->CCR1 = 0;
+			HAL_TIM_PWM_Start(motor.tim_R, TIM_CHANNEL_1);
+		}
+		else if(motor.channel_R == 2){
+			motor.tim_number_R->CCR2 = 0;
+			HAL_TIM_PWM_Start(motor.tim_R, TIM_CHANNEL_2);
+		}
+		else if(motor.channel_R == 3){
+			motor.tim_number_R->CCR3 = 0;
+			HAL_TIM_PWM_Start(motor.tim_R, TIM_CHANNEL_3);
+		}
+		else if(motor.channel_R == 4){
+			motor.tim_number_R->CCR4 = 0;
+			HAL_TIM_PWM_Start(motor.tim_R, TIM_CHANNEL_4);
+		}
 		if(motor.channel_L == 1){
 			motor.tim_number_L->CCR1 = speed;
 			HAL_TIM_PWM_Start(motor.tim_L, TIM_CHANNEL_1);
