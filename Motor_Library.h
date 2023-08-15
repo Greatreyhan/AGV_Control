@@ -12,6 +12,16 @@
 #include <stdbool.h>
 
 typedef struct{
+	TIM_HandleTypeDef* 	tim;
+	TIM_TypeDef* 				tim_number;
+	uint32_t						counter;
+	int16_t							counts;
+	int16_t							position;
+	int16_t							old_position;
+	int									speed;
+}encoder_t;
+
+typedef struct{
 	TIM_HandleTypeDef* 	tim_R;
 	TIM_HandleTypeDef* 	tim_L;
 	TIM_TypeDef* 				tim_number_R;
@@ -24,17 +34,8 @@ typedef struct{
 	GPIO_TypeDef*				EN_PORT_L;
 	uint16_t						EN_PIN_R;
 	uint16_t						EN_PIN_L;
+	encoder_t						ENC;
 }motor_t;
-
-typedef struct{
-	TIM_HandleTypeDef* 	tim;
-	TIM_TypeDef* 				tim_number;
-	uint32_t						counter;
-	int16_t							counts;
-	int16_t							position;
-	int16_t							old_position;
-	int									speed;
-}encoder_t;
 
 /* 
 	||****** Run Omnidirection Wheel *****||
@@ -44,7 +45,22 @@ typedef struct{
 												2 -> counterclockwise
 */
 void agv_run_motor(motor_t motor, int16_t speed);
-void agv_move_rotate(motor_t motor, int16_t speed);
+void agv_stop(motor_t motor);
+void agv_stop_all(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD);
+	
+// Free move
+void agv_play_rotate(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed);
+void agv_play_y(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed);
+void agv_play_x(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed);
+void agv_play_cross_A(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed);
+void agv_play_cross_B(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed);
+
+// Move Based on Encoder
+void agv_move_rotate(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed, int32_t dist);
+void agv_move_y(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed, int32_t dist);
+void agv_move_x(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed, int32_t dist);
+void agv_move_cross_A(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed, int32_t dist);
+void agv_move_cross_B(motor_t motorA, motor_t motorB, motor_t motorC, motor_t motorD, int16_t speed, int32_t dist);
 
 /* 
 	||****** Encoder Init *****||

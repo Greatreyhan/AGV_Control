@@ -197,17 +197,20 @@ int main(void)
 	agv_encoder_start(encoder_B, &htim2, TIM2);
 	agv_encoder_start(encoder_C, &htim4, TIM4);
 	agv_encoder_start(encoder_D, &htim5, TIM5);
-  
-	agv_run_motor(motor_A, 1000);
-	agv_run_motor(motor_B, 1000);
-	agv_run_motor(motor_C, 1000);
-	agv_run_motor(motor_D, 1000);
+	
+	//+++++++++++++++++++++++++++++++++ ENCODER TO MOTOR ++++++++++++++++++++++++++++++++++++//
+	motor_A.ENC = encoder_A;
+	motor_B.ENC = encoder_B;
+	motor_C.ENC = encoder_C;
+	motor_D.ENC = encoder_D;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

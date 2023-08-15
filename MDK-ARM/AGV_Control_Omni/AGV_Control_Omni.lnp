@@ -4,6 +4,7 @@
 "agv_control_omni\stm32f4xx_it.o"
 "agv_control_omni\stm32f4xx_hal_msp.o"
 "agv_control_omni\motor_library.o"
+"agv_control_omni\komunikasi.o"
 "agv_control_omni\stm32f4xx_hal_tim.o"
 "agv_control_omni\stm32f4xx_hal_tim_ex.o"
 "agv_control_omni\stm32f4xx_hal_rcc.o"
