@@ -32,5 +32,5 @@ agv_control_omni\motor_library.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_
 agv_control_omni\motor_library.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 agv_control_omni\motor_library.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 agv_control_omni\motor_library.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-agv_control_omni\motor_library.o: ..\..\AGV_Control_Omni\Motor_Library.h
+agv_control_omni\motor_library.o: ../../AGV_Control_Omni/Motor_Library.h
 agv_control_omni\motor_library.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

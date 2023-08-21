@@ -61,10 +61,10 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_UART_Pin GPIO_PIN_13
 #define LED_UART_GPIO_Port GPIOC
-#define LED_C_Pin GPIO_PIN_14
-#define LED_C_GPIO_Port GPIOC
-#define LED_D_Pin GPIO_PIN_15
-#define LED_D_GPIO_Port GPIOC
+#define IN3_Pin GPIO_PIN_14
+#define IN3_GPIO_Port GPIOC
+#define IN4_Pin GPIO_PIN_15
+#define IN4_GPIO_Port GPIOC
 #define Buzzer_Pin GPIO_PIN_4
 #define Buzzer_GPIO_Port GPIOA
 #define ENR_A_Pin GPIO_PIN_2
@@ -83,10 +83,10 @@ void Error_Handler(void);
 #define ENR_D_GPIO_Port GPIOA
 #define ENL_D_Pin GPIO_PIN_15
 #define ENL_D_GPIO_Port GPIOA
-#define LED_A_Pin GPIO_PIN_4
-#define LED_A_GPIO_Port GPIOB
-#define LED_B_Pin GPIO_PIN_5
-#define LED_B_GPIO_Port GPIOB
+#define IN1_Pin GPIO_PIN_4
+#define IN1_GPIO_Port GPIOB
+#define IN2_Pin GPIO_PIN_5
+#define IN2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 /* USER CODE END Private defines */

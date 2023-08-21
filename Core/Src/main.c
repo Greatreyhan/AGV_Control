@@ -731,17 +731,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LED_UART_Pin|LED_C_Pin|LED_D_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, LED_UART_Pin|IN3_Pin|IN4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, Buzzer_Pin|ENR_D_Pin|ENL_D_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, ENR_A_Pin|ENL_A_Pin|ENR_B_Pin|ENL_B_Pin
-                          |ENR_C_Pin|ENL_C_Pin|LED_A_Pin|LED_B_Pin, GPIO_PIN_RESET);
+                          |ENR_C_Pin|ENL_C_Pin|IN1_Pin|IN2_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_UART_Pin LED_C_Pin LED_D_Pin */
-  GPIO_InitStruct.Pin = LED_UART_Pin|LED_C_Pin|LED_D_Pin;
+  /*Configure GPIO pins : LED_UART_Pin IN3_Pin IN4_Pin */
+  GPIO_InitStruct.Pin = LED_UART_Pin|IN3_Pin|IN4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -755,9 +755,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : ENR_A_Pin ENL_A_Pin ENR_B_Pin ENL_B_Pin
-                           ENR_C_Pin ENL_C_Pin LED_A_Pin LED_B_Pin */
+                           ENR_C_Pin ENL_C_Pin IN1_Pin IN2_Pin */
   GPIO_InitStruct.Pin = ENR_A_Pin|ENL_A_Pin|ENR_B_Pin|ENL_B_Pin
-                          |ENR_C_Pin|ENL_C_Pin|LED_A_Pin|LED_B_Pin;
+                          |ENR_C_Pin|ENL_C_Pin|IN1_Pin|IN2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
