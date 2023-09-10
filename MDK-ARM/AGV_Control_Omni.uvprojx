@@ -414,6 +414,16 @@
               <FilePath>..\Komunikasi.h</FilePath>
             </File>
             <File>
+              <FileName>Aktuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Aktuator.c</FilePath>
+            </File>
+            <File>
+              <FileName>Aktuator.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Aktuator.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>

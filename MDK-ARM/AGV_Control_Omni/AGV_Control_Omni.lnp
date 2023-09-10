@@ -2,6 +2,7 @@
 "agv_control_omni\startup_stm32f411xe.o"
 "agv_control_omni\motor_library.o"
 "agv_control_omni\komunikasi.o"
+"agv_control_omni\aktuator.o"
 "agv_control_omni\main.o"
 "agv_control_omni\stm32f4xx_it.o"
 "agv_control_omni\stm32f4xx_hal_msp.o"

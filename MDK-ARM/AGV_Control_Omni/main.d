@@ -34,3 +34,4 @@ agv_control_omni\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.
 agv_control_omni\main.o: ../../AGV_Control_Omni/Motor_Library.h
 agv_control_omni\main.o: ../Core/Inc/main.h
 agv_control_omni\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+agv_control_omni\main.o: ../../AGV_Control_Omni/Komunikasi.h

@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "Komunikasi.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,6 +78,7 @@ static void MX_USART6_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint32_t vt = 0;
+com_get_t msg;
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance  == TIM1){
@@ -101,6 +102,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		encoder_D.position	= encoder_D.counts/4;
 	}
 }
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	rx_get(&msg);
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+}
+
 
 /* USER CODE END 0 */
 
@@ -203,14 +210,22 @@ int main(void)
 	motor_B.ENC = encoder_B;
 	motor_C.ENC = encoder_C;
 	motor_D.ENC = encoder_D;
-
+	
+	//+++++++++++++++++++++++++++++++++ COM START +++++++++++++++++++++++++++++++++++++++++++//
+	komunikasi_init(&huart6);
+	rx_start_get();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		
+		tx_ping();
+		HAL_Delay(100);
+//		HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, GPIO_PIN_SET);
+//		HAL_Delay(1000);
+//		HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, GPIO_PIN_RESET);
+//		HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
